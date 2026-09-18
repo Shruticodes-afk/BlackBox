@@ -15,8 +15,8 @@ import '@xyflow/react/dist/style.css';
 import dagre from 'dagre';
 import { Terminal, Activity, AlertTriangle, ShieldCheck, RefreshCw, Zap, CreditCard, Database, Key, Mail, Monitor, Server } from 'lucide-react';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://nzaxjczpulglafajxkuk.supabase.co';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_xXaKYHzDVT__SDWTkgE2gQ_DmuaNFnn';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
