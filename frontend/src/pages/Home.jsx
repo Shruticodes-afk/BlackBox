@@ -1,4 +1,4 @@
-﻿import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { Database, CreditCard, Mail, Key, ArrowRight, Zap, Network, Activity } from 'lucide-react';
 
@@ -40,40 +40,47 @@ export default function Home() {
             
             {/* Tactical Hero Section */}
             <section id="overview" className="space-y-8 relative max-w-6xl mx-auto w-full pb-20">
-  {/* Hero Content Grid */}
-    <div className="relative flex-1 flex flex-col md:flex-row items-center min-h-[500px] animate-[fadeInUp_1s_ease-out]">
-      {/* Left Text */}
-      <div className="relative z-20 w-full md:w-1/2 space-y-8">
-        <h1 className="text-5xl lg:text-[4.5rem] font-extrabold tracking-tight text-white leading-[1.05]">
-          Predicting <br/>
-          Service Failures. <br/>
-          <span className="text-[#ccff00]">Before They Cascade.</span>
-        </h1>
+  {/* Hero Content Area */}
+  <div className="relative flex flex-col w-full min-h-[600px] pt-4">
+    {/* Massive Wordmark */}
+    <div className="w-full mb-12 animate-[fadeInUp_1s_ease-out]">
+      <h1 className="text-[13vw] font-black tracking-tighter text-white leading-none uppercase m-0 select-none opacity-95">
+        CASCADEOPS
+      </h1>
+    </div>
+
+    {/* Two Column Layout below */}
+    <div className="flex flex-col md:flex-row items-center w-full relative z-10 animate-[fadeInUp_1s_ease-out_0.2s_both]">
+      {/* Left Column */}
+      <div className="w-full md:w-[55%] space-y-6 md:pr-10 relative z-20">
+        <h2 className="text-3xl lg:text-4xl font-bold text-white tracking-tight leading-tight">
+          CascadeOps is the ultimate <span className="text-[#ccff00]">dependency simulation engine.</span>
+        </h2>
+        <p className="text-lg text-slate-400 leading-relaxed max-w-lg">
+          Predict service failures before they cascade. Intentionally trigger simulated outages in your distributed systems and map the exact blast radius of every microservice in real-time.
+        </p>
         
-        {/* Input Row */}
-        <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-700 p-1.5 rounded-full w-full max-w-lg shadow-inner mt-8">
-          <input 
-            type="text" 
-            placeholder="Enter a service name to simulate..." 
-            className="flex-1 bg-transparent border-none outline-none text-white px-4 text-sm placeholder:text-zinc-500"
-          />
-          <Link to="/dashboard" className="bg-[#ccff00] text-black font-bold px-5 py-2.5 rounded-full text-sm hover:scale-105 transition-transform flex items-center gap-2 shrink-0 shadow-[0_0_15px_rgba(204,255,0,0.4)]">
-            Test Simulation <ArrowRight size={14} />
+        {/* Buttons */}
+        <div className="flex flex-wrap items-center gap-6 pt-4">
+          <Link to="/dashboard" className="bg-[#ccff00] text-black font-extrabold px-8 py-3.5 rounded-full text-sm hover:scale-105 transition-transform uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+            Run Simulation <ArrowRight size={16} />
           </Link>
+          <button onClick={() => scrollTo('how-it-works')} className="text-white hover:text-[#ccff00] font-bold text-sm tracking-widest uppercase transition-colors">
+            How it works
+          </button>
         </div>
       </div>
       
-      {/* Right Visual (Globe) */}
-      <div className="absolute md:relative right-[-100px] md:right-0 top-1/2 md:top-0 -translate-y-1/2 md:translate-y-0 w-[500px] h-[500px] lg:w-[600px] lg:h-[600px] pointer-events-none z-10 flex items-center justify-center opacity-30 md:opacity-100">
-        {/* The Globe */}
-        <div className="absolute inset-0 right-[-150px] top-[-50px]">
+      {/* Right Visual */}
+      <div className="absolute md:relative right-[-80px] md:right-[-50px] top-[100px] md:top-0 w-[500px] h-[500px] lg:w-[600px] lg:h-[600px] pointer-events-none z-0 flex items-center justify-center opacity-20 md:opacity-100 mt-10 md:mt-[-50px]">
+        <div className="absolute inset-0">
           <Suspense fallback={<div className="w-full h-full rounded-full border border-zinc-900 animate-pulse"></div>}>
             <KineticSculpture />
           </Suspense>
         </div>
-        
-        </div>
+      </div>
     </div>
+  </div>
   
 
   {/* Testimonial / Social Proof Strip */}
