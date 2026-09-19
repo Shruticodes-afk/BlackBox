@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { Database, CreditCard, Mail, Key, ArrowRight, Zap, Network, Activity } from 'lucide-react';
 
-const KineticSculpture = lazy(() => import('../components/KineticSculpture'));
+const GlobeComponent = lazy(() => import('../components/GlobeComponent'));
 
 export default function Home() {
   const scrollTo = (id) => {
@@ -75,7 +75,7 @@ export default function Home() {
       <div className="absolute md:relative right-[-80px] md:right-[-50px] top-[100px] md:top-0 w-[500px] h-[500px] lg:w-[600px] lg:h-[600px] pointer-events-none z-0 flex items-center justify-center opacity-20 md:opacity-100 mt-10 md:mt-[-50px]">
         <div className="absolute inset-0">
           <Suspense fallback={<div className="w-full h-full rounded-full border border-zinc-900 animate-pulse"></div>}>
-            <KineticSculpture />
+            <GlobeComponent />
           </Suspense>
         </div>
       </div>
