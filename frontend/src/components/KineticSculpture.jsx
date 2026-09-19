@@ -1,64 +1,66 @@
 ﻿import React from 'react';
 
 export default function KineticSculpture() {
+  const path1 = "M 100 100 C 300 200, 200 400, 500 500";
+  const path2 = "M 50 200 L 450 550";
+  const path3 = "M 200 50 C 400 150, 300 350, 550 450";
+
   return (
     <div style={{ width: '600px', height: '600px', position: 'relative' }}>
+      <style>{`
+        @keyframes slide {
+          0% { offset-distance: 0%; }
+          100% { offset-distance: 100%; }
+        }
+        .ball {
+          position: absolute;
+          width: 16px;
+          height: 16px;
+          background-color: #ccff00;
+          border-radius: 50%;
+          top: 0;
+          left: 0;
+          /* Explicit offset anchor to ensure it's centered on the path */
+          offset-anchor: 50% 50%;
+          /* Disable transform rotation auto-alignment just to keep the shadow perfect */
+          offset-rotate: 0deg;
+          box-shadow: 0 0 15px 4px rgba(204, 255, 0, 0.6);
+          animation: slide linear infinite;
+        }
+        .ball-1 {
+          offset-path: path('${path1}');
+          animation-duration: 4s;
+        }
+        .ball-2 {
+          offset-path: path('${path2}');
+          animation-duration: 3.2s;
+          background-color: #ffffff;
+          box-shadow: 0 0 15px 4px rgba(255, 255, 255, 0.6);
+          width: 12px;
+          height: 12px;
+        }
+        .ball-3 {
+          offset-path: path('${path3}');
+          animation-duration: 4.8s;
+        }
+      `}</style>
+
+      {/* SVG just to draw the visible tracks */}
       <svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          
-          <path id="track1" d="M 50 100 C 200 100, 150 400, 300 450 C 450 500, 500 250, 550 300" fill="transparent" />
-          <path id="track2" d="M 550 150 C 400 100, 350 350, 250 400 C 150 450, 100 200, 50 350" fill="transparent" />
-          <path id="track3" d="M 300 50 C 500 150, 450 450, 300 550 C 150 650, 100 250, 300 50" fill="transparent" />
-        </defs>
-
-        {/* Tracks rendered visually */}
-        <path d="M 50 100 C 200 100, 150 400, 300 450 C 450 500, 500 250, 550 300" 
-              stroke="#222" strokeWidth="6" fill="transparent" />
-        <path d="M 50 100 C 200 100, 150 400, 300 450 C 450 500, 500 250, 550 300" 
-              stroke="#ccff00" strokeWidth="2" fill="transparent" opacity="0.5" />
-
-        <path d="M 550 150 C 400 100, 350 350, 250 400 C 150 450, 100 200, 50 350" 
-              stroke="#222" strokeWidth="6" fill="transparent" />
-        <path d="M 550 150 C 400 100, 350 350, 250 400 C 150 450, 100 200, 50 350" 
-              stroke="#ccff00" strokeWidth="2" fill="transparent" opacity="0.5" />
-
-        <path d="M 300 50 C 500 150, 450 450, 300 550 C 150 650, 100 250, 300 50" 
-              stroke="#222" strokeWidth="6" fill="transparent" />
-        <path d="M 300 50 C 500 150, 450 450, 300 550 C 150 650, 100 250, 300 50" 
-              stroke="#ccff00" strokeWidth="2" fill="transparent" opacity="0.5" />
-
-        {/* Balls */}
-        <circle r="8" fill="#ccff00" filter="url(#neon-glow)">
-          <animateMotion dur="4s" repeatCount="indefinite">
-            <mpath href="#track1" />
-          </animateMotion>
-        </circle>
-
-        <circle r="6" fill="#fff" filter="url(#neon-glow)">
-          <animateMotion dur="3.5s" repeatCount="indefinite">
-            <mpath href="#track2" />
-          </animateMotion>
-        </circle>
-
-        <circle r="10" fill="#ccff00" filter="url(#neon-glow)">
-          <animateMotion dur="5s" repeatCount="indefinite" begin="1s">
-            <mpath href="#track3" />
-          </animateMotion>
-        </circle>
+        <path d={path1} stroke="#333" strokeWidth="8" fill="none" strokeLinecap="round" />
+        <path d={path1} stroke="#ccff00" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.3" />
         
-        <circle r="5" fill="#ccff00" filter="url(#neon-glow)">
-          <animateMotion dur="6s" repeatCount="indefinite" begin="0.5s">
-            <mpath href="#track1" />
-          </animateMotion>
-        </circle>
+        <path d={path2} stroke="#333" strokeWidth="6" fill="none" strokeLinecap="round" />
+        <path d={path2} stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.3" />
+        
+        <path d={path3} stroke="#333" strokeWidth="8" fill="none" strokeLinecap="round" />
+        <path d={path3} stroke="#ccff00" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.3" />
       </svg>
+
+      {/* Balls moving on the CSS offset paths */}
+      <div className="ball ball-1"></div>
+      <div className="ball ball-2"></div>
+      <div className="ball ball-3"></div>
     </div>
   );
 }
