@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Database, CreditCard, Mail, Key, ArrowRight, Zap, Network, Activity } from 'lucide-react';
 
-const GlobeComponent = lazy(() => import('../components/GlobeComponent'));
+const KineticSculpture = lazy(() => import('../components/KineticSculpture'));
 
 export default function Home() {
   const scrollTo = (id) => {
@@ -68,7 +68,7 @@ export default function Home() {
         {/* The Globe */}
         <div className="absolute inset-0 right-[-150px] top-[-50px]">
           <Suspense fallback={<div className="w-full h-full rounded-full border border-zinc-900 animate-pulse"></div>}>
-            <GlobeComponent />
+            <KineticSculpture />
           </Suspense>
         </div>
         
