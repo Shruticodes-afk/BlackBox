@@ -43,8 +43,8 @@ export default function Home() {
   {/* Hero Content Area */}
   <div className="relative flex flex-col w-full min-h-[600px] pt-4">
     {/* Massive Wordmark */}
-    <div className="w-full mb-12 animate-[fadeInUp_1s_ease-out]">
-      <h1 className="text-[13vw] font-black tracking-tighter text-white leading-none uppercase m-0 select-none opacity-95">
+    <div className="w-full mb-12 animate-[fadeInUp_1s_ease-out] overflow-hidden">
+      <h1 className="text-[clamp(3rem,10vw,8rem)] font-black tracking-tighter text-white leading-none uppercase m-0 select-none opacity-95 w-full text-left">
         CASCADEOPS
       </h1>
     </div>
