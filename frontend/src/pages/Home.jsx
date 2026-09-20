@@ -15,24 +15,14 @@ export default function Home() {
 
 
       <div className="flex flex-1 w-full max-w-7xl mx-auto items-start">
-        {/* Sidebar Navigation */}
-        <aside className="w-[150px] border-r border-slate-800 p-4 mr-10 hidden md:block shrink-0 sticky top-0 h-[calc(100vh-40px)] overflow-y-auto">
-          <h3 className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mb-3">Documentation</h3>
-          <nav className="flex flex-col gap-4">
-            <button onClick={() => scrollTo('overview')} className="text-left text-sm font-medium text-slate-500 hover:text-[#ccff00] bg-transparent hover:bg-transparent outline-none focus:outline-none border-none shadow-none transition-colors">Overview</button>
-            <button onClick={() => scrollTo('how-it-works')} className="text-left text-sm font-medium text-slate-500 hover:text-[#ccff00] bg-transparent hover:bg-transparent outline-none focus:outline-none border-none shadow-none transition-colors">How It Works</button>
-            <button onClick={() => scrollTo('features')} className="text-left text-sm font-medium text-slate-500 hover:text-[#ccff00] bg-transparent hover:bg-transparent outline-none focus:outline-none border-none shadow-none transition-colors">Features</button>
-            <button onClick={() => scrollTo('get-started')} className="text-left text-sm font-medium text-slate-500 hover:text-[#ccff00] bg-transparent hover:bg-transparent outline-none focus:outline-none border-none shadow-none transition-colors">Get Started</button>
-            <button onClick={() => scrollTo('supported-services')} className="text-left text-sm font-medium text-slate-500 hover:text-[#ccff00] bg-transparent hover:bg-transparent outline-none focus:outline-none border-none shadow-none transition-colors">Supported Services</button>
-          </nav>
-        </aside>
+        
 
         {/* Main Content */}
         <main className="flex-1 p-8 md:p-12 lg:p-16 w-full">
           <div className="w-full space-y-24 pb-32">
             
             {/* Tactical Hero Section */}
-            <section id="overview" className="space-y-8 relative max-w-6xl mx-auto w-full pb-20">
+            <section id="overview" className="space-y-8 relative w-full pb-20">
     {/* Hero Content Area */}
   <div className="relative flex flex-col w-full min-h-[600px]">
     {/* Mini-Nav Inside Hero */}
