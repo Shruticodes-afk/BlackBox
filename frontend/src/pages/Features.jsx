@@ -1,4 +1,5 @@
-﻿import { Network, Terminal, AlertTriangle, ShieldCheck } from 'lucide-react';
+import FloatingNav from '../components/FloatingNav';
+import { Network, Terminal, AlertTriangle, ShieldCheck } from 'lucide-react';
 
 export default function Features() {
   const features = [
@@ -29,7 +30,8 @@ export default function Features() {
   ];
 
   return (
-    <div className="p-12 max-w-5xl mx-auto w-full">
+    <div className="p-12 max-w-5xl mx-auto w-full relative">
+      <div className="-ml-8 -mt-8 mb-8"><FloatingNav /></div>
       <div className="mb-12">
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Platform Features</h1>
         <p className="text-slate-500 dark:text-slate-600 dark:text-slate-400 text-lg">

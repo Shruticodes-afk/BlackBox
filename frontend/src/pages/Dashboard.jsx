@@ -1,3 +1,4 @@
+import FloatingNav from '../components/FloatingNav';
 import { useEffect, useState, useRef } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import {
@@ -342,6 +343,7 @@ export default function Dashboard() {
 
   return (
     <div className="w-full h-full flex flex-col overflow-hidden relative">
+        <FloatingNav />
       
 
       <div className="flex flex-1 overflow-hidden">
