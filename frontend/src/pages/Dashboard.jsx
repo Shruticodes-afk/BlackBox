@@ -14,7 +14,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import dagre from 'dagre';
-import { Terminal, Activity, AlertTriangle, ShieldCheck, RefreshCw, Zap, CreditCard, Database, Key, Mail, Monitor, Server } from 'lucide-react';
+import { Terminal, Activity, AlertTriangle, ShieldCheck, ShieldAlert, RefreshCw, Zap, CreditCard, Database, Key, Mail, Monitor, Server, Upload } from 'lucide-react';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -129,6 +129,8 @@ export default function Dashboard() {
   const [projects, setProjects] = useState(['demo']);
   const [hideIsolated, setHideIsolated] = useState(false);
   const [visibleTraces, setVisibleTraces] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const terminalRef = useRef(null);
   const [rfInstance, setRfInstance] = useState(null);
 
@@ -224,21 +226,26 @@ export default function Dashboard() {
   };
 
   const fetchGraph = async () => {
-
+    setIsLoading(true);
+    setError(null);
     try {
       const res = await fetch(`${API_URL}/graph?project=${selectedProject}`);
       const data = await res.json();
       
-      const edges = data.edges;
-      const formattedNodes = data.nodes.map(n => {
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to fetch graph data');
+      }
+      
+      const edges = data.edges || [];
+      const formattedNodes = (data.nodes || []).map(n => {
         let tooltip = '';
         if (n.type === 'service') {
-           const dependentCount = edges.filter(e => e.source === n.id).length;
+           const dependentCount = edges.filter(e => e.target === n.id).length;
            tooltip = `${n.data.label} — Criticality: ${n.data.criticality || 0}/100 — ${dependentCount} feature${dependentCount !== 1 ? 's' : ''} depend${dependentCount === 1 ? 's' : ''} on this`;
         } else {
-           const sourceEdges = edges.filter(e => e.target === n.id);
+           const sourceEdges = edges.filter(e => e.source === n.id);
            const sourceNames = sourceEdges.map(e => {
-              const sourceNode = data.nodes.find(sn => sn.id === e.source);
+              const sourceNode = data.nodes.find(sn => sn.id === e.target);
               return sourceNode ? sourceNode.data.label : 'Unknown';
            }).join(', ');
            tooltip = `${n.data.label} — Depends on: ${sourceNames || 'Nothing'}`;
@@ -250,7 +257,7 @@ export default function Dashboard() {
         };
       });
 
-      const formattedEdges = data.edges.map(e => ({
+      const formattedEdges = edges.map(e => ({
         ...e,
         markerEnd: { type: MarkerType.ArrowClosed, color: '#64748b' },
         style: { stroke: '#64748b', strokeWidth: 2 },
@@ -273,9 +280,11 @@ export default function Dashboard() {
         setEdges(layoutedEdges);
         setServices(layoutedNodes.filter(n => n.data.type === 'service'));
       
-
     } catch (err) {
       console.error('Failed to fetch graph', err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -439,6 +448,30 @@ export default function Dashboard() {
 
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 relative">
+          {isLoading && (
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+              <div className="w-12 h-12 border-4 border-slate-700 border-t-[#ccff00] rounded-full animate-spin mb-4"></div>
+              <p className="text-slate-200 font-medium">Connecting to backend...</p>
+              <p className="text-slate-400 text-sm mt-2 max-w-sm text-center">If the backend is waking up from inactivity, this may take up to 50 seconds.</p>
+            </div>
+          )}
+          
+          {!isLoading && error && (
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-slate-900/50 backdrop-blur-sm">
+              <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-6 py-4 rounded-lg flex flex-col items-center max-w-md text-center">
+                <ShieldAlert size={32} className="mb-3 text-red-500" />
+                <h3 className="text-lg font-bold text-red-300 mb-1">Failed to load graph</h3>
+                <p className="text-sm">{error}</p>
+                <button 
+                  onClick={fetchGraph}
+                  className="mt-4 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-sm transition-colors"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          )}
+
           <ReactFlow
             nodes={nodes}
             edges={edges}
