@@ -126,6 +126,7 @@ export default function Dashboard() {
   const [simulatingId, setSimulatingId] = useState(null);
   const [traces, setTraces] = useState([]);
   const [selectedProject, setSelectedProject] = useState('demo');
+  const [projects, setProjects] = useState(['demo']);
   const [hideIsolated, setHideIsolated] = useState(false);
   const [visibleTraces, setVisibleTraces] = useState([]);
   const terminalRef = useRef(null);
@@ -133,7 +134,97 @@ export default function Dashboard() {
 
   const pollIntervalRef = useRef(null);
 
+  
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase.from('services').select('project');
+      if (!error && data) {
+        let uniqueProjects = Array.from(new Set(data.map(d => d.project).filter(Boolean)));
+        if (!uniqueProjects.includes('demo')) uniqueProjects.unshift('demo');
+        setProjects(uniqueProjects);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const json = JSON.parse(event.target.result);
+        
+        if (!json.project || typeof json.project !== 'string') throw new Error('Missing or invalid "project" field');
+        if (!Array.isArray(json.services)) throw new Error('Missing or invalid "services" array');
+        if (!Array.isArray(json.features)) throw new Error('Missing or invalid "features" array');
+        
+        const projectName = json.project;
+        
+        const servicesToInsert = json.services.map(s => ({
+          name: s.name,
+          criticality_score: s.criticality,
+          status: 'healthy',
+          project: projectName
+        }));
+        
+        const { data: insertedServices, error: errS } = await supabase.from('services').insert(servicesToInsert).select();
+        if (errS) throw errS;
+        
+        const featuresToInsert = json.features.map(f => ({
+          name: f.name,
+          status: 'healthy',
+          project: projectName
+        }));
+        
+        const { data: insertedFeatures, error: errF } = await supabase.from('features').insert(featuresToInsert).select();
+        if (errF) throw errF;
+        
+        const serviceMap = {};
+        insertedServices.forEach(s => serviceMap[s.name] = s.id);
+        
+        const featureMap = {};
+        insertedFeatures.forEach(f => featureMap[f.name] = f.id);
+        
+        const depsToInsert = [];
+        json.features.forEach(f => {
+          if (Array.isArray(f.dependsOn)) {
+            f.dependsOn.forEach(sName => {
+              if (serviceMap[sName] && featureMap[f.name]) {
+                depsToInsert.push({
+                  feature_id: featureMap[f.name],
+                  service_id: serviceMap[sName]
+                });
+              }
+            });
+          }
+        });
+        
+        if (depsToInsert.length > 0) {
+          const { error: errD } = await supabase.from('dependencies').insert(depsToInsert);
+          if (errD) throw errD;
+        }
+        
+        alert(`Successfully uploaded project ${projectName}!`);
+        await fetchProjects();
+        setSelectedProject(projectName);
+        
+      } catch (err) {
+        alert('Invalid JSON file or error uploading: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = null;
+  };
+
   const fetchGraph = async () => {
+
     try {
       const res = await fetch(`${API_URL}/graph?project=${selectedProject}`);
       const data = await res.json();
