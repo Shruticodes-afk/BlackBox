@@ -470,21 +470,30 @@ export default function Dashboard() {
                 </button>
               </div>
               
-              <div className="flex items-center bg-slate-200 dark:bg-slate-800/50 p-1 rounded-lg">
-                <button 
-                  onClick={() => setSelectedProject('demo')}
-                  className={`flex-1 text-xs font-semibold py-2 rounded-md transition-colors ${selectedProject === 'demo' ? 'bg-[#ccff00] text-black shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
+              
+              <div className="flex flex-col gap-2">
+                <select 
+                  value={selectedProject}
+                  onChange={(e) => setSelectedProject(e.target.value)}
+                  className="w-full bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md py-2 px-3 text-xs font-semibold text-slate-700 dark:text-slate-300 outline-none focus:ring-1 focus:ring-[#ccff00]"
                 >
-                  Demo Project
-                </button>
-                <button 
-                  onClick={() => setSelectedProject('her-safety')}
-                  className={`flex-1 text-xs font-semibold py-2 rounded-md transition-colors ${selectedProject === 'her-safety' ? 'bg-[#ccff00] text-black shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-                >
-                  Her-Safety
-                </button>
+                  {projects.map(p => (
+                    <option key={p} value={p}>{p}</option>
+                  ))}
+                </select>
+                <div className="relative">
+                  <input 
+                    type="file" 
+                    accept=".json" 
+                    onChange={handleFileUpload} 
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <button className="w-full bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white text-xs font-bold py-2 px-4 rounded transition-colors flex items-center justify-center gap-2">
+                    <Database size={14} /> Upload Project JSON
+                  </button>
+                </div>
               </div>
-            </div>
+          </div>
               <div className="flex flex-col gap-3">
                 {services.map(s => (
                   <button

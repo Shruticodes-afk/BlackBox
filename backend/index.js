@@ -26,36 +26,6 @@ app.get('/api/graph', async (req, res) => {
       supabase.from('dependencies').select('*')
     ]);
 
-    // Fallback if the 'project' column hasn't been created yet to prevent breaking
-    if (sErr && (sErr.code === 'PGRST100' || sErr.code === '42703')) {
-      console.warn("Project column not found, falling back to all data with in-memory filter");
-      const fallback = await Promise.all([
-        supabase.from('services').select('*'),
-        supabase.from('features').select('*'),
-        supabase.from('dependencies').select('*')
-      ]);
-      services = fallback[0].data;
-      sErr = fallback[0].error;
-      features = fallback[1].data;
-      fErr = fallback[1].error;
-      dependencies = fallback[2].data;
-      dErr = fallback[2].error;
-      
-      // In-memory filter fallback
-      if (filterProject === 'demo') {
-        const demoServices = ['AuthService', 'PaymentService', 'DBService', 'EmailService', 'FrontendApp', 'ServerInfra'];
-        const demoFeatures = ['Login', 'Checkout', 'Subscription', 'OrderConfirmation', 'Browsing'];
-        services = services.filter(s => demoServices.includes(s.name));
-        features = features.filter(f => demoFeatures.includes(f.name));
-      } else if (filterProject === 'her-safety') {
-        const herSafetyServices = ['SupabaseAuth', 'SupabaseDB', 'LeafletMaps', 'GeminiAI', 'FrontendApp', 'ServerInfra'];
-        const herSafetyFeatures = ['UserLogin', 'UserSignup', 'SafeRouteNavigation', 'UnsafeLocationDetection', 'NearbyPoliceStations', 'StreetlightData', 'SavedLocations', 'SmartSafetySuggestions'];
-        services = services.filter(s => herSafetyServices.includes(s.name));
-        // Note UserLogin is in both, so it will match demo or her-safety depending on filterProject
-        features = features.filter(f => herSafetyFeatures.includes(f.name));
-      }
-    }
-
     if (sErr) throw sErr;
     if (fErr) throw fErr;
     if (dErr) throw dErr;
@@ -112,7 +82,8 @@ app.post('/api/simulate/:serviceId', async (req, res) => {
     // Mark service as failed
     await supabase.from('services').update({ status: 'failed' }).eq('id', serviceId);
 
-    // BFS to find all affected features
+    // Breadth-First Search (BFS) to identify the full blast radius of a failure.
+    // We traverse the dependency graph starting from the failed service to find all affected features.
     const affectedFeatureIds = new Set();
     const queue = [serviceId];
     
