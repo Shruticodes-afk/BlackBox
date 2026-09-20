@@ -12,14 +12,7 @@ export default function Home() {
   return (
     <div className="flex flex-col flex-1 w-full bg-black font-sans text-slate-200">
       
-      {/* Tactical Status Bar */}
-      <div className="w-full flex justify-between items-center px-4 md:px-8 py-2 border-b border-slate-800 font-mono text-[10px] md:text-xs text-[#ccff00] uppercase tracking-[0.2em] bg-black">
-        <span>[ BLACKBOX DASHBOARD | DEPENDENCY SIMULATION ENGINE ]</span>
-        <span className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse"></span> 
-          [ STATUS: LIVE ]
-        </span>
-      </div>
+
 
       <div className="flex flex-1 w-full max-w-7xl mx-auto items-start">
         {/* Sidebar Navigation */}
