@@ -31,11 +31,11 @@ export default function Home() {
         <Skull className="text-[#ccff00] w-6 h-6" />
         <span className="font-bold text-white tracking-tight text-lg">BlackBox</span>
       </div>
-      <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-        <button onClick={() => scrollTo('features')} className="hover:text-white transition-colors">Features</button>
-        <button className="hover:text-white transition-colors">Pricing</button>
-        <button onClick={() => scrollTo('how-it-works')} className="hover:text-white transition-colors">Docs</button>
-      </div>
+      <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400 m-0 p-0">
+          <button onClick={() => scrollTo('features')} className="hover:text-white transition-colors flex items-center leading-none m-0 p-0 outline-none focus:outline-none bg-transparent border-none h-full">Features</button>
+          <Link to="/dashboard" className="hover:text-white transition-colors flex items-center leading-none m-0 p-0 h-full">Live Dashboard</Link>
+          <button onClick={() => scrollTo('how-it-works')} className="hover:text-white transition-colors flex items-center leading-none m-0 p-0 outline-none focus:outline-none bg-transparent border-none h-full">Docs</button>
+        </div>
       <div>
         <Link to="/dashboard" className="bg-white text-black px-5 py-2 text-sm font-bold rounded-full hover:bg-zinc-200 transition-colors">
           Get Started
