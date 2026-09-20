@@ -142,8 +142,27 @@ export default function Dashboard() {
       const { data, error } = await supabase.from('services').select('project');
       if (!error && data) {
         let uniqueProjects = Array.from(new Set(data.map(d => d.project).filter(Boolean)));
-        if (!uniqueProjects.includes('demo')) uniqueProjects.unshift('demo');
-        setProjects(uniqueProjects);
+        
+        // If there are valid projects and 'demo' wasn't intentionally created, select the first real project
+        if (uniqueProjects.length > 0) {
+          setProjects(uniqueProjects);
+          // Only change selectedProject if it's currently 'demo' (the initial state) or not in the list
+          setProjects(prevProjects => {
+             // We use an updater function to ensure we don't cause infinite render loops, 
+             // but here we just need to update selectedProject based on the new list
+             return uniqueProjects;
+          });
+          
+          setSelectedProject(prev => {
+             if (prev === 'demo' || !uniqueProjects.includes(prev)) {
+               return uniqueProjects[0];
+             }
+             return prev;
+          });
+        } else {
+          // Fallback if DB is completely empty of projects
+          setProjects(['demo']);
+        }
       }
     } catch (e) {
       console.error(e);
