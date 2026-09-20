@@ -1,0 +1,21 @@
+﻿{
+  "project": "E-Commerce Platform",
+  "services": [
+    { "name": "PaymentGateway", "criticality": 95 },
+    { "name": "Database", "criticality": 90 },
+    { "name": "AuthProvider", "criticality": 70 },
+    { "name": "EmailService", "criticality": 30 },
+    { "name": "CDN", "criticality": 40 },
+    { "name": "SearchEngine", "criticality": 50 }
+  ],
+  "features": [
+    { "name": "Checkout", "dependsOn": ["PaymentGateway", "Database"] },
+    { "name": "Login", "dependsOn": ["AuthProvider"] },
+    { "name": "Signup", "dependsOn": ["AuthProvider", "Database"] },
+    { "name": "ProductSearch", "dependsOn": ["SearchEngine", "CDN"] },
+    { "name": "OrderConfirmationEmail", "dependsOn": ["EmailService"] },
+    { "name": "ProductBrowsing", "dependsOn": ["CDN"] },
+    { "name": "Wishlist", "dependsOn": ["Database", "AuthProvider"] },
+    { "name": "OrderHistory", "dependsOn": ["Database", "AuthProvider"] }
+  ]
+}
