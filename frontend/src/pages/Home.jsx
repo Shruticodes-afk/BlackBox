@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
-import { Database, CreditCard, Mail, Key, ArrowRight, Zap, Network, Activity } from 'lucide-react';
+import { Database, CreditCard, Mail, Key, ArrowRight, Zap, Network, Activity, Skull } from 'lucide-react';
 
 const GlobeComponent = lazy(() => import('../components/GlobeComponent'));
 
@@ -33,40 +33,56 @@ export default function Home() {
             
             {/* Tactical Hero Section */}
             <section id="overview" className="space-y-8 relative max-w-6xl mx-auto w-full pb-20">
-  {/* Hero Content Area */}
-  <div className="relative flex flex-col w-full min-h-[600px] pt-4">
-    {/* Massive Wordmark */}
-    <div className="w-full mb-12 animate-[fadeInUp_1s_ease-out] overflow-hidden">
-      <h1 className="text-[clamp(3rem,10vw,8rem)] font-black tracking-tighter text-white leading-none uppercase m-0 select-none opacity-95 w-full text-left">
-        BLACKBOX
-      </h1>
+    {/* Hero Content Area */}
+  <div className="relative flex flex-col w-full min-h-[600px]">
+    {/* Mini-Nav Inside Hero */}
+    <div className="flex items-center justify-between w-full py-4 mb-12 border-b border-zinc-800">
+      <div className="flex items-center gap-2">
+        <Skull className="text-[#ccff00] w-6 h-6" />
+        <span className="font-bold text-white tracking-tight text-lg">BlackBox</span>
+      </div>
+      <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+        <button onClick={() => scrollTo('features')} className="hover:text-white transition-colors">Features</button>
+        <button className="hover:text-white transition-colors">Pricing</button>
+        <button onClick={() => scrollTo('how-it-works')} className="hover:text-white transition-colors">Docs</button>
+      </div>
+      <div>
+        <Link to="/dashboard" className="bg-white text-black px-5 py-2 text-sm font-bold rounded-full hover:bg-zinc-200 transition-colors">
+          Get Started
+        </Link>
+      </div>
     </div>
 
-    {/* Two Column Layout below */}
-    <div className="flex flex-col md:flex-row items-center w-full relative z-10 animate-[fadeInUp_1s_ease-out_0.2s_both]">
+    {/* Hero Main Content */}
+    <div className="flex flex-col md:flex-row items-center w-full relative z-10 animate-[fadeInUp_1s_ease-out]">
       {/* Left Column */}
-      <div className="w-full md:w-[55%] space-y-6 md:pr-10 relative z-20">
-        <h2 className="text-3xl lg:text-4xl font-bold text-white tracking-tight leading-tight">
-          BlackBox is the ultimate <span className="text-[#ccff00]">dependency simulation engine.</span>
-        </h2>
-        <p className="text-lg text-slate-400 leading-relaxed max-w-lg">
-          Predict service failures before they cascade. Intentionally trigger simulated outages in your distributed systems and map the exact blast radius of every microservice in real-time.
-        </p>
+      <div className="w-full md:w-1/2 space-y-8 relative z-20">
+        <h1 className="text-5xl lg:text-[4.5rem] font-extrabold tracking-tight text-white leading-[1.05]">
+          Predicting <br/>
+          Service Failures. <br/>
+          <span className="text-[#ccff00]">Before They Cascade.</span>
+        </h1>
         
-        {/* Buttons */}
-        <div className="flex flex-wrap items-center gap-6 pt-4">
-          <Link to="/dashboard" className="bg-[#ccff00] text-black font-extrabold px-8 py-3.5 rounded-full text-sm hover:scale-105 transition-transform uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(204,255,0,0.3)]">
-            Run Simulation <ArrowRight size={16} />
+        <p className="text-lg text-slate-400 leading-relaxed max-w-md">
+          Intentionally trigger simulated outages in your distributed systems and map the exact blast radius of every microservice in real-time.
+        </p>
+
+        {/* Input Row */}
+        <div className="flex items-center gap-2 bg-zinc-900 border border-zinc-700 p-1.5 rounded-full w-full max-w-lg shadow-inner mt-8">
+          <input 
+            type="text" 
+            placeholder="Enter a service name to simulate..." 
+            className="flex-1 bg-transparent border-none outline-none text-white px-4 text-sm placeholder:text-zinc-500"
+          />
+          <Link to="/dashboard" className="bg-[#ccff00] text-black font-bold px-5 py-2.5 rounded-full text-sm hover:scale-105 transition-transform flex items-center gap-2 shrink-0 shadow-[0_0_15px_rgba(204,255,0,0.4)]">
+            Test Simulation <ArrowRight size={14} />
           </Link>
-          <button onClick={() => scrollTo('how-it-works')} className="text-white hover:text-[#ccff00] font-bold text-sm tracking-widest uppercase transition-colors">
-            How it works
-          </button>
         </div>
       </div>
       
       {/* Right Visual */}
-      <div className="absolute md:relative right-[-80px] md:right-[-50px] top-[100px] md:top-0 w-[500px] h-[500px] lg:w-[600px] lg:h-[600px] pointer-events-none z-0 flex items-center justify-center opacity-20 md:opacity-100 mt-10 md:mt-[-50px]">
-        <div className="absolute inset-0">
+      <div className="absolute md:relative right-[-50px] md:right-0 top-[100px] md:top-0 w-[500px] h-[500px] lg:w-[600px] lg:h-[600px] pointer-events-none z-0 flex items-center justify-center opacity-30 md:opacity-100 mt-10 md:mt-0">
+        <div className="absolute inset-0 right-[-150px] top-[-50px]">
           <Suspense fallback={<div className="w-full h-full rounded-full border border-zinc-900 animate-pulse"></div>}>
             <GlobeComponent />
           </Suspense>
@@ -75,7 +91,6 @@ export default function Home() {
     </div>
   </div>
   
-
   {/* Testimonial / Social Proof Strip */}
   <div className="w-full bg-[#0a0a0a] border border-zinc-800 rounded-[1.5rem] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 animate-[fadeInUp_1s_ease-out_0.3s_both] shadow-xl">
     <div className="flex-1 max-w-2xl">
