@@ -18,7 +18,7 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 // 1. GET /api/graph
 app.get('/api/graph', async (req, res) => {
   try {
-    const filterProject = req.query.project || 'demo';
+    const filterProject = req.query.project || '';
     
     let [
       { data: services, error: sErr },
