@@ -125,8 +125,8 @@ export default function Dashboard() {
   const [summary, setSummary] = useState(null);
   const [simulatingId, setSimulatingId] = useState(null);
   const [traces, setTraces] = useState([]);
-  const [selectedProject, setSelectedProject] = useState('demo');
-  const [projects, setProjects] = useState(['demo']);
+  const [selectedProject, setSelectedProject] = useState('');
+  const [projects, setProjects] = useState([]);
   const [hideIsolated, setHideIsolated] = useState(false);
   const [visibleTraces, setVisibleTraces] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -141,27 +141,17 @@ export default function Dashboard() {
     try {
       const { data, error } = await supabase.from('services').select('project');
       if (!error && data) {
-        let uniqueProjects = Array.from(new Set(data.map(d => d.project).filter(Boolean)));
+        let uniqueProjects = Array.from(new Set(data.map(d => d.project).filter(p => p && p !== 'demo')));
         
-        // If there are valid projects and 'demo' wasn't intentionally created, select the first real project
         if (uniqueProjects.length > 0) {
           setProjects(uniqueProjects);
-          // Only change selectedProject if it's currently 'demo' (the initial state) or not in the list
-          setProjects(prevProjects => {
-             // We use an updater function to ensure we don't cause infinite render loops, 
-             // but here we just need to update selectedProject based on the new list
-             return uniqueProjects;
-          });
           
           setSelectedProject(prev => {
-             if (prev === 'demo' || !uniqueProjects.includes(prev)) {
+             if (!prev || !uniqueProjects.includes(prev)) {
                return uniqueProjects[0];
              }
              return prev;
           });
-        } else {
-          // Fallback if DB is completely empty of projects
-          setProjects(['demo']);
         }
       }
     } catch (e) {
@@ -245,6 +235,7 @@ export default function Dashboard() {
   };
 
   const fetchGraph = async () => {
+    if (!selectedProject) return;
     setIsLoading(true);
     setError(null);
     try {
