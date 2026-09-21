@@ -108,12 +108,7 @@ app.post('/api/simulate/:serviceId', async (req, res) => {
     const featureIdsArray = Array.from(affectedFeatureIds);
     if (featureIdsArray.length > 0) {
       // Fire and forget staggered cascade update
-      (async () => {
-        for (let i = 0; i < featureIdsArray.length; i++) {
-          await new Promise(r => setTimeout(r, 400));
-          await supabase.from('features').update({ status: 'failed' }).eq('id', featureIdsArray[i]);
-        }
-      })();
+      await supabase.from('features').update({ status: 'failed' }).in('id', featureIdsArray);
     }
 
     const { count: totalFeatures } = await supabase.from('features').select('*', { count: 'exact', head: true });

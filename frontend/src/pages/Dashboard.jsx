@@ -401,14 +401,15 @@ export default function Dashboard() {
       setVisibleTraces([]);
       setTraces([{ step: 'Calculating blast radius impact...', status: 'pending', timestamp: new Date().toISOString() }]);
       
-      // Artificial delay to simulate complex impact calculation
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const [traceRes, simRes] = await Promise.all([
+        fetch(`${API_URL}/trace/${serviceNode.id}`, { method: 'POST' }),
+        fetch(`${API_URL}/simulate/${serviceNode.id}`, { method: 'POST' })
+      ]);
       
-      const traceRes = await fetch(`${API_URL}/trace/${serviceNode.id}`, { method: 'POST' });
-      const { request_id } = await traceRes.json();
-      
-      const simRes = await fetch(`${API_URL}/simulate/${serviceNode.id}`, { method: 'POST' });
-      const simData = await simRes.json();
+      const [{ request_id }, simData] = await Promise.all([
+        traceRes.json(),
+        simRes.json()
+      ]);
       
       setSummary({
         rootCause: serviceNode.data.label,
